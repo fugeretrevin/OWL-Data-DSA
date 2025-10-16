@@ -1,0 +1,133 @@
+body{
+    background: #EDF0F7;
+    align-self: start;
+}
+
+
+#header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #2D3648;
+    border-radius: 10px;
+    color: white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+
+
+}
+#container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #717D96;
+    max-width: 800px;
+    min-width: 60%;
+    height: 70%;
+    border-radius: 10px;
+    border: 3px solid gray;
+    margin-top: 100px;
+    padding-top: 50px;
+    padding-bottom: 90px;
+    align-self: center;
+    justify-self: center;
+
+
+
+}
+.column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+
+    margin: 0 40px;
+    width: 100%;
+    max-width: 300px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+
+
+
+}
+#content {
+    display: flex;
+    flex-direction: column;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: white;
+    width: 100%;
+    max-width: 150px;
+}
+
+.input-box {
+    background: #A0ABC0;
+    border-radius: 5px;
+    padding: 7px;
+    border: 0px solid gray;
+    width: 100%;
+    color: white;
+
+}
+
+
+::placeholder {
+    color: white;
+}
+#button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+}
+#button-container button {
+    width: 20%;
+    margin: 20px;
+    height: 50px;
+    border-radius: 10px;
+    transition: .4s;
+    cursor: pointer;
+    max-width: 150px;
+    font-size: medium;
+    font-weight: bold;
+    font-family: Inter, Verdana, Geneva, Tahoma, sans-serif;
+
+
+}
+#Search {
+    background-color: #2D3648;
+    border: none;
+
+    color: white;
+}
+#Apply {
+    background-color: #EDF0F7;
+    border: #2D3648 solid 3px;
+    color: #2D3648;
+
+}
+#button-container button:hover {
+    transform: scale(1.05);
+
+}
+
+
+#button-container button:active {
+    transform: scale(0.95);
+    transition: .1s;
+
+}
+#MatchTypeDropdown {
+    cursor: pointer;
+}
+@keyframes customHover {
+    0% {
+        transform: scale(1.0);
+    }
+
+    100% {
+        transform: scale(1.05);
+    }
+
+
+}
