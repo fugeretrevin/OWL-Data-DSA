@@ -1,6 +1,35 @@
 document.addEventListener('DOMContentLoaded', () =>
 {
+    const teamSelect = document.getElementById("team-dropdown");
+    const playerSelect = document.getElementById("player-dropdown");
+    fetch("teams.json")
+        .then(response => response.json())
 
+        .then(data => {
+            data.forEach(teamObj => {
+                const option = document.createElement("option");
+                option.value = teamObj.team;
+                option.textContent = teamObj.team;
+                teamSelect.appendChild(option);
+            });
+
+            teamSelect.addEventListener("change", () => {
+                const selectedTeam = teamSelect.value;
+
+                playerSelect.innerHTML = '<option value="">Select Player</option>';
+
+                const teamData = data.find(t => t.team === selectedTeam);
+
+                if (teamData) {
+                    teamData.players.forEach(player => {
+                        const option = document.createElement("option");
+                        option.value = player;
+                        option.textContent = player;
+                        playerSelect.appendChild(option);
+                    });
+                }
+            });
+        })
     const resultsContainer = document.getElementById('results-container');
     resultsContainer.visible = false;
     resultsContainer.style.display = 'none';
@@ -77,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () =>
         else {
             results.textContent = 'Applied, tags are ';
             for (i in filters.children) {
-                if (filters.children[i].textContent != 'undefined') {
+                if (filters.children[i].textContent !== 'undefined') {
                     results.textContent += filters.children[i].textContent + ' ';
 
                 }
@@ -90,3 +119,5 @@ document.addEventListener('DOMContentLoaded', () =>
 
 
 });
+
+

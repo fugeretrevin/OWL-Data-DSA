@@ -14,33 +14,61 @@
 </div>
 
     <div id="container">
+        <div class="content">
+            <h2>Team</h2>
+            <select class="input-box" id="team" placeholder="Select Team (required)" required>
+                <option value="">Select Team</option>
+
+                </select>
+        </div>
+        <div class="column-container">
+
         <div class="column" id="left-column">
             <div class="content">
                 <h2>Player</h2>
-                <input class="input-box" type="text" id="player" placeholder="Enter player username">
+                <select class="input-box" id="player-dropdown" placeholder="Select Player">
+                    <option value="">Select Player</option>
+
+                </select>
+
             </div>
             <div class="content">
                 <h2>Hero</h2>
-                <input class="input-box" type="text" id="hero" placeholder="Enter hero name">
+                <select class="input-box" id="hero-dropdown" placeholder="Select Hero">
+                    <option value="">Select Hero</option>
+
+                </select>
+
             </div>
 
         </div>
         <div class="column" id="right-column">
             <div class="content">
                 <h2>Map</h2>
-                <input class="input-box" type="text" id="map" placeholder="Enter Map (or dropdown?)">
+                <select class="input-box" id="map-dropdown" placeholder="Select Map">
+                    <option value="">Select Map</option>
+
+                </select>
+
             </div>
             <div class="content">
-                <h2>Match Type</h2>
-                <select class="input-box" id="MatchTypeDropdown" name="MatchTypeDropdown">
-                    <option value="Normal Match">Normal Match</option>
-                    <option value="Tournament">Tournament</option>
-                    <option value="Allstar Match">Allstar Match</option>
+                <h2>Stat</h2>
+                <select class="input-box" id="StatDropdown" name="StatDropdown">
+                    <option value="All Stats">All Stats</option>
+                    <option value="Assists">Assists</option>
+                    <option value="Deaths">Deaths</option>
+                    <option value="Eliminations">Eliminations</option>
+                    <option value="Final Blows">Final Blows</option>
+                    <option value="Healing Done">Healing Done</option>
+                    <option value="Hero Damage">Hero Damage</option>
+                    <option value="Time Played">Time Played</option>
                 </select>
             </div>
         </div>
 
     </div>
+    </div>
+
 <div id="button-container">
     <button id="apply-button">Apply Filters</button>
     <button id="search-button">Search</button>
