@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () =>
 {
     const teamSelect = document.getElementById("team-dropdown");
     const playerSelect = document.getElementById("player-dropdown");
-    fetch("teams.json")
+    fetch("./teams.json")
         .then(response => response.json())
 
         .then(data => {
@@ -39,10 +39,12 @@ document.addEventListener('DOMContentLoaded', () =>
     applyButton.addEventListener('click', apply);
 
     function search() {
-        const playerInput = document.getElementById('player');
-        const heroInput = document.getElementById('hero');
-        const mapInput = document.getElementById('map');
-        const matchInput = document.getElementById('MatchTypeDropdown');
+        const playerInput = document.getElementById('player-dropdown');
+        const heroInput = document.getElementById('hero-dropdown');
+        const mapInput = document.getElementById('map-dropdown');
+        const teamInput = document.getElementById('team-dropdown');
+        const statInput = document.getElementById('stat-dropdown');
+
         const filters = document.getElementById('filters');
         const resultsHeader = document.getElementById('results-header');
         const results = document.getElementById('results');
@@ -52,18 +54,22 @@ document.addEventListener('DOMContentLoaded', () =>
         if (existingAlert) {
             existingAlert.remove();
         }
+        if (teamInput.value !== '') {
+            addTag("Team: " + teamInput.value, filters);
+        }
         if (playerInput.value !== '') {
-            addTag(playerInput.value, filters);
+            addTag("Player: " + playerInput.value, filters);
         }
         if (heroInput.value !== '') {
-            addTag(heroInput.value, filters);
+            addTag("Hero: " + heroInput.value, filters);
         }
         if (mapInput.value !== '') {
-            addTag(mapInput.value, filters);
+            addTag("Map: " + mapInput.value, filters);
         }
-        if (matchInput.value !== '') {
-            addTag(matchInput.value, filters);
+        if (statInput.value !== '') {
+            addTag("Stat: " + statInput.value, filters);
         }
+
 
 
 
