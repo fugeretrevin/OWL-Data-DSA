@@ -2,6 +2,10 @@ document.addEventListener('DOMContentLoaded', () =>
 {
     const teamSelect = document.getElementById("team-dropdown");
     const playerSelect = document.getElementById("player-dropdown");
+    const mapSelect = document.getElementById("map-dropdown");
+    const heroSelect = document.getElementById("hero-dropdown");
+
+
     fetch("./teams.json")
         .then(response => response.json())
 
@@ -30,6 +34,35 @@ document.addEventListener('DOMContentLoaded', () =>
                 }
             });
         })
+    fetch("./maps.json")
+        .then(response => response.json())
+
+        .then(data => {
+            data.forEach(mapObj => {
+                const option = document.createElement("option");
+                option.value = mapObj;
+                option.textContent = mapObj;
+                mapSelect.appendChild(option);
+            });
+
+
+        })
+    fetch("./heros.json")
+        .then(response => response.json())
+
+        .then(data => {
+            data.forEach(heroObj => {
+                const option = document.createElement("option");
+                option.value = heroObj;
+                option.textContent = heroObj;
+                heroSelect.appendChild(option);
+            });
+
+
+        })
+
+
+
     const resultsContainer = document.getElementById('results-container');
     resultsContainer.visible = false;
     resultsContainer.style.display = 'none';
@@ -48,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () =>
         const filters = document.getElementById('filters');
         const resultsHeader = document.getElementById('results-header');
         const results = document.getElementById('results');
-        results.textContent = "no data- tags are " + filters.textContent;
+        results.textContent = "Tags: " + filters.textContent;
         filters.innerHTML = '';
         const existingAlert = resultsHeader.querySelector('.alert-text');
         if (existingAlert) {
@@ -56,9 +89,6 @@ document.addEventListener('DOMContentLoaded', () =>
         }
         if (teamInput.value !== '') {
             addTag("Team: " + teamInput.value, filters);
-        }
-        else {
-
         }
         if (playerInput.value !== '') {
             addTag("Player: " + playerInput.value, filters);
@@ -151,6 +181,9 @@ document.addEventListener('DOMContentLoaded', () =>
             if (!teamSelected) {
                 results.textContent = "Team and one other filter required.";
             }
+            //Actually search
+
+
         }
 
 

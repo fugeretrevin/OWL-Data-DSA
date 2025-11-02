@@ -86,6 +86,7 @@ body{
     border: 0px solid gray;
     width: 100%;
     color: white;
+    max-height: 150px;
 
 }
 
