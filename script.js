@@ -57,6 +57,9 @@ document.addEventListener('DOMContentLoaded', () =>
         if (teamInput.value !== '') {
             addTag("Team: " + teamInput.value, filters);
         }
+        else {
+
+        }
         if (playerInput.value !== '') {
             addTag("Player: " + playerInput.value, filters);
         }
@@ -70,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () =>
             addTag("Stat: " + statInput.value, filters);
         }
 
-
+        apply();
 
 
 
@@ -78,6 +81,12 @@ document.addEventListener('DOMContentLoaded', () =>
 
     }
     function addTag(value, container) {
+        const playerInput = document.getElementById('player-dropdown');
+        const heroInput = document.getElementById('hero-dropdown');
+        const mapInput = document.getElementById('map-dropdown');
+        const teamInput = document.getElementById('team-dropdown');
+        const statInput = document.getElementById('stat-dropdown');
+
         const tag = document.createElement('div');
         tag.classList.add('tag');
         tag.textContent = value;
@@ -85,10 +94,26 @@ document.addEventListener('DOMContentLoaded', () =>
             tag.remove();
             const alertText = document.createElement('h6');
             const resultsHeader = document.getElementById('results-header');
+            if (tag.textContent.startsWith("Team: ")) {
+                teamInput.selectedIndex = 0;
+            }
+            if (tag.textContent.startsWith("Player: ")) {
+                playerInput.selectedIndex = 0;
+            }
+            if (tag.textContent.startsWith("Map: ")) {
+                mapInput.selectedIndex = 0;
+            }
+            if (tag.textContent.startsWith("Hero: ")) {
+                heroInput.selectedIndex = 0;
+            }
+            if (tag.textContent.startsWith("Stat: ")) {
+                statInput.selectedIndex = 0;
+            }
             if (resultsHeader.children.length < 2) {
                 resultsHeader.appendChild(alertText);
                 alertText.classList.add('alert-text');
                 alertText.innerText = "Apply Filters to update";
+
             }
 
 
@@ -105,17 +130,26 @@ document.addEventListener('DOMContentLoaded', () =>
         if (existingAlert) {
             existingAlert.remove();
         }
-        if (filters.children.length < 1) {
-            results.textContent = 'No tags are found';
+        if (filters.children.length < 2) {
+            results.textContent = 'Team and one other filter required.';
 
         }
         else {
             results.textContent = 'Applied, tags are ';
-            for (i in filters.children) {
-                if (filters.children[i].textContent !== 'undefined') {
-                    results.textContent += filters.children[i].textContent + ' ';
+            let teamSelected = false;
 
+            for (const tag of filters.children) {
+                if (tag.textContent.trim() !== "") {
+                    if (tag.textContent.startsWith("Team: ")) {
+                        teamSelected = true;
+                    }
+
+                    results.textContent += tag.textContent + ' ';
                 }
+            }
+
+            if (!teamSelected) {
+                results.textContent = "Team and one other filter required.";
             }
         }
 

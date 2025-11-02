@@ -7,7 +7,36 @@
       "Gator",
       "Masaa",
       "Pokpo",
-      "babybay"
+      "babybay",
+      "Daco",
+      "dafran",
+      "Kodak",
+      "NLaaeR",
+      "frd",
+      "FunnyAstro"
+    ]
+  },
+  {
+    "team": "Boston Uprising",
+    "players": [
+      "Gamsu",
+      "Kellex",
+      "Mistakes",
+      "Neko",
+      "NotE",
+      "STRIKER",
+      "DreamKazper",
+      "Kalios",
+      "AimGod",
+      "Snow",
+      "Fusions",
+      "alemao",
+      "axxiom",
+      "blas\u00c3\u00a9",
+      "ColourHex",
+      "rCk",
+      "Persia",
+      "Stellar"
     ]
   },
   {
@@ -18,7 +47,61 @@
       "Kyo",
       "YangXiaoLong",
       "Yveltal",
-      "ameng"
+      "ameng",
+      "lateyoung",
+      "Baconjack",
+      "GARRY",
+      "JIQIREN"
+    ]
+  },
+  {
+    "team": "Dallas Fuel",
+    "players": [
+      "Custa",
+      "EFFECT",
+      "HarryHook",
+      "Mickie",
+      "Seagull",
+      "Taimou",
+      "Chipshajen",
+      "xQc",
+      "cocco",
+      "aKm",
+      "Rascal",
+      "uNKOE",
+      "OGE",
+      "Closer",
+      "ZachaREEE",
+      "rCk",
+      "NotE",
+      "Trill"
+    ]
+  },
+  {
+    "team": "Florida Mayhem",
+    "players": [
+      "CWoosH",
+      "Logix",
+      "Manneten",
+      "TviQ",
+      "Zebbosai",
+      "Zuppeh",
+      "zappis",
+      "sayaplayer",
+      "SNT",
+      "HaGoPeun",
+      "Kris",
+      "SWoN",
+      "bqb",
+      "xepheR",
+      "Apply",
+      "Mcgravy",
+      "Fate",
+      "byrem",
+      "RaiN",
+      "DPI",
+      "GARGOYLE",
+      "Karayan"
     ]
   },
   {
@@ -30,7 +113,12 @@
       "Rio",
       "nero",
       "shu",
-      "Happy"
+      "Happy",
+      "Kyb",
+      "Onlywish",
+      "Rise",
+      "Bischu",
+      "fragi"
     ]
   },
   {
@@ -42,7 +130,28 @@
       "Guxue",
       "Ria",
       "iDK",
-      "Adora"
+      "Adora",
+      "NoSmite",
+      "Revenge",
+      "SASIN",
+      "Krystal"
+    ]
+  },
+  {
+    "team": "Houston Outlaws",
+    "players": [
+      "Bani",
+      "Jake",
+      "LiNkzr",
+      "Muma",
+      "Rawkus",
+      "coolmatt",
+      "Boink",
+      "Clockwork",
+      "Spree",
+      "FCTFCTN",
+      "ArHaN",
+      "Danteh"
     ]
   },
   {
@@ -50,47 +159,108 @@
     "players": [
       "Bdosin",
       "Birdring",
+      "Closer",
       "Fury",
       "Gesture",
       "Profit",
+      "NUS",
       "QuaterMain",
       "Guard",
-      "NUS"
+      "Rascal",
+      "Fissure",
+      "Hooreg",
+      "HaGoPeun",
+      "WooHyaL",
+      "Krillin"
     ]
   },
   {
     "team": "Los Angeles Gladiators",
     "players": [
       "BigG00se",
+      "Bischu",
       "Hydration",
       "Shaz",
       "Surefour",
+      "iRemiix",
       "Void",
+      "silkthread",
       "rOar",
-      "Decay"
+      "Decay",
+      "Asher",
+      "Fissure",
+      "Ripa"
+    ]
+  },
+  {
+    "team": "Los Angeles Valiant",
+    "players": [
+      "Agilities",
+      "Custa",
+      "Fate",
+      "KariV",
+      "SPACE",
+      "SoOn",
+      "Envy",
+      "uNKOE",
+      "silkthread",
+      "Verbo",
+      "Bunny",
+      "KSF",
+      "Numlocked",
+      "IZaYaKI",
+      "KuKi",
+      "FCTFCTN",
+      "Shax",
+      "Mcgravy"
     ]
   },
   {
     "team": "New York Excelsior",
     "players": [
-      "Anamo",
-      "Fl0w3R",
+      "ArK",
       "JJonak",
       "Mano",
       "MekO",
+      "Pine",
       "SAEBYEOLBE",
-      "Libero"
+      "Janus",
+      "Libero",
+      "Anamo",
+      "Fl0w3R",
+      "Nenne"
+    ]
+  },
+  {
+    "team": "Paris Eternal",
+    "players": [
+      "BenBest",
+      "Finnsi",
+      "HyP",
+      "Kruise",
+      "NiCOgdh",
+      "SoOn",
+      "ShaDowBurn",
+      "Greyy",
+      "LhCloudy",
+      "danye"
     ]
   },
   {
     "team": "Philadelphia Fusion",
     "players": [
       "Boombox",
-      "Poko",
+      "HOTBA",
       "SADO",
       "carpe",
       "eqo",
-      "neptuNo"
+      "neptuNo",
+      "Poko",
+      "DayFly",
+      "ShaDowBurn",
+      "fragi",
+      "snillo",
+      "Elk"
     ]
   },
   {
@@ -105,7 +275,13 @@
       "Rascal",
       "Architect",
       "Nevix",
-      "super"
+      "super",
+      "Danteh",
+      "Nomy",
+      "babybay",
+      "dhaK",
+      "sleepy",
+      "iddqd"
     ]
   },
   {
@@ -116,7 +292,20 @@
       "Marve1",
       "Michelle",
       "ryujehong",
-      "tobi"
+      "tobi",
+      "Miro",
+      "Munchkin",
+      "ZUNBA",
+      "KuKi",
+      "Wekeed",
+      "Bunny",
+      "Gido",
+      "xepheR",
+      "Gambler",
+      "Fissure",
+      "Jecse",
+      "Highly",
+      "ILLICIT"
     ]
   },
   {
@@ -128,7 +317,40 @@
       "IZaYaKI",
       "YOUNGJIN",
       "diem",
-      "DDing"
+      "DDing",
+      "Altering",
+      "Diya",
+      "Freefeel",
+      "Roshan",
+      "Undead",
+      "Xushu",
+      "MG",
+      "Fiveking",
+      "Ado",
+      "FEARLESS",
+      "Daemin",
+      "Geguri",
+      "Sky",
+      "Luffy",
+      "GuardiaN"
+    ]
+  },
+  {
+    "team": "Toronto Defiant",
+    "players": [
+      "Aid",
+      "Envy",
+      "RoKy",
+      "Stellar",
+      "Yakpung",
+      "ivy",
+      "Neko",
+      "Asher",
+      "im37",
+      "Gods",
+      "sharyk",
+      "Mangachu",
+      "Logix"
     ]
   },
   {
@@ -139,7 +361,26 @@
       "SLIME",
       "SeoMinSoo",
       "TiZi",
-      "Twilight"
+      "Twilight",
+      "BUMPER",
+      "Stitch",
+      "Rapel",
+      "Hooreg"
+    ]
+  },
+  {
+    "team": "Washington Justice",
+    "players": [
+      "Ado",
+      "Corey",
+      "Fahzix",
+      "Gido",
+      "Janus",
+      "Sansam",
+      "Hyeonu",
+      "Stratus",
+      "ArK",
+      "sleepy"
     ]
   }
 ]
