@@ -1,3 +1,7 @@
+let Module;
+createModule().then(mod => Module = mod);
+
+
 document.addEventListener('DOMContentLoaded', () =>
 {
     const teamSelect = document.getElementById("team-dropdown");
@@ -183,6 +187,16 @@ document.addEventListener('DOMContentLoaded', () =>
             }
             //Actually search
 
+            if (Module) {
+                const output = Module.runFilters(
+                    teamInput.value,
+                    playerInput.value,
+                    heroInput.value,
+                    mapInput.value,
+                    statInput.value
+                );
+                document.getElementById("results").textContent = output;
+            }
 
         }
 

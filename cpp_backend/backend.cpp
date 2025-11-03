@@ -1,6 +1,8 @@
 #include "owlDataClass.h"
 #include <fstream>
 #include <sstream>
+#include <emscripten/bind.h>
+using namespace std;
 
 owlDataClass::owlDataClass() { // default constructor, values should be updated immediately when data is read and parsed
     matchDate = "", matchId = 0, mapName = "", playerName = "", teamName = "", heroName = "", statName = "", statValue = 0;
@@ -64,3 +66,8 @@ void merge(vector<owlDataClass>& arr, int left, int mid, int right) {}
 void quickSort(vector<owlDataClass>& arr, int low, int high) {}
 
 int partition(vector<owlDataClass>& arr, int low, int high) {}
+
+
+EMSCRIPTEN_BINDINGS(my_module) {
+  emscripten::function("sortData", &sortData);
+  }

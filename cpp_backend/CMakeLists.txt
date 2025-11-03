@@ -4,5 +4,5 @@ project(cpp_stuff)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(cpp_stuff main.cpp
-        owlDataClass.cpp
+        backend.cpp
         owlDataClass.h)
