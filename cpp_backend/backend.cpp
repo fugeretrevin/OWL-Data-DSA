@@ -13,6 +13,8 @@ owlDataClass::owlDataClass() { // default constructor, values should be updated 
 //     matchDate = date, matchId = id, mapName = map, playerName = player, teamName = team, heroName = hero, statName = stat, statValue = statVal;
 // }
 
+//I wouldn't imagine so lol
+
 vector<owlDataClass> readData(const string& file) {
     vector<owlDataClass> data;
     ifstream ifs(file);
@@ -62,10 +64,39 @@ void mergeSort(vector<owlDataClass>& arr, int left, int right) {}
 
 void merge(vector<owlDataClass>& arr, int left, int mid, int right) {}
 
-// Quick sort
-void quickSort(vector<owlDataClass>& arr, int low, int high) {}
+// Quick sort (Andrew)
+void quickSort(vector<owlDataClass>& arr, int low, int high) {
+    if (low < high) {
+      int pivot = partition(arr, low, high);
+      quickSort(arr, low, pivot - 1);
+      quickSort(arr, pivot + 1, high);
+    }
+}
 
-int partition(vector<owlDataClass>& arr, int low, int high) {}
+int partition(vector<owlDataClass>& arr, int low, int high) {
+    int pivot = arr[low];
+    int up = low;
+    int down = high;
+    while (up < down) {
+      for (int j = up; j < high; j++) {
+        if(array[up].statValue > pivot) {
+          break;
+        }
+        up++;
+    }
+    for (int j = high; j > low; j--) {
+      if (array[down].statValue < pivot) {
+        break;
+      }
+      down--;
+    }
+    if (up < down) {
+      swap(&arr[up], &arr[down]);
+    }
+    swap(&arr[low], &arr[high]);
+    return down;
+}
+
 
 
 EMSCRIPTEN_BINDINGS(my_module) {
