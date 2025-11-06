@@ -89,7 +89,21 @@ body{
     max-height: 150px;
 
 }
+.sort-selection {
+    display: flex;
+    flex-direction: row;
+    color: white;
 
+    width: 100%;
+    max-width: 300px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    align-self: center;
+    justify-self: center;
+    margin-top: 10px;
+    align-content: center;
+    justify-content: center;
+
+}
 
 ::placeholder {
     color: white;

@@ -68,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () =>
 
 
     const resultsContainer = document.getElementById('results-container');
-    resultsContainer.visible = false;
     resultsContainer.style.display = 'none';
     const searchButton = document.getElementById('search-button');
     searchButton.addEventListener('click', search);
@@ -158,8 +157,17 @@ document.addEventListener('DOMContentLoaded', () =>
         const results = document.getElementById('results');
         const resultsHeader = document.getElementById('results-header');
         const filters = document.getElementById('filters');
+        const playerInput = document.getElementById('player-dropdown');
+        const heroInput = document.getElementById('hero-dropdown');
+        const mapInput = document.getElementById('map-dropdown');
+        const teamInput = document.getElementById('team-dropdown');
+        const statInput = document.getElementById('stat-dropdown');
+        const sortChoice = document.querySelector('input[name="sortAlg"]:checked').value;
+        let useMergeSort = false;
 
-
+        if (sortChoice === 'merge') {
+            useMergeSort = true;
+        }
         const existingAlert = resultsHeader.querySelector('.alert-text');
         if (existingAlert) {
             existingAlert.remove();
@@ -188,14 +196,36 @@ document.addEventListener('DOMContentLoaded', () =>
             //Actually search
 
             if (Module) {
-                const output = Module.runFilters(
-                    teamInput.value,
-                    playerInput.value,
-                    heroInput.value,
-                    mapInput.value,
-                    statInput.value
-                );
-                document.getElementById("results").textContent = output;
+                try {
+                    const filePath = "./OWL-data/phs_2018_playoffs.csv";
+                    const cppVector = Module.getProcessedData(filePath, teamInput.value, playerInput.value, heroInput.value, mapInput.value, statInput.value, useMergeSort);
+                    const jsArray = [];
+                    const vectorSize = cppVector.size();
+                    if (vectorSize === 0) {
+                        results.textContent = "No results found";
+                        return;
+                    }
+                    for (let i = 0; i < vectorSize; i++) {
+                        const item = cppVector.get(i);
+                        jsArray.push({
+                            player: item.playerName,
+                            team: item.teamName,
+                            hero: item.heroName,
+                            map: item.mapName,
+                            stat: item.statName,
+                            value: item.statValue,
+                            date: item.matchDate
+                        });
+
+                    }
+
+                    const topResults = jsArray.slice(0, 50);
+                    results.textContent = `${jsArray.length} results found. Showing top ${topResults.length} results.:${JSON.stringify(topResults, null, 2)}`;
+                    cppVector.delete();
+                } catch (e) {
+                    console.error(e);
+                    results.textContent = "Error occurred";
+                }
             }
 
         }

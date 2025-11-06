@@ -59,6 +59,41 @@ void sortData(vector<owlDataClass>& data, bool usingMergeSort) { // sorts data v
     }
 }
 
+
+
+// For JavaScript processing
+vector<owlDataClass> getProcessedData(string filePath, string team, string player, string hero, string map, string stat, bool useMergeSort) {
+	vector<owlDataClass> allData = readData(filePath);
+	if (allData.empty()) {
+		return vector<owlDataClass>();
+	}
+
+	vector<owlDataClass> filtered = filterData(allData, stat, player, map, team, hero);
+
+	sortData(filtered, useMergeSort);
+
+	return filtered;
+}
+
+EMSCRIPTEN_BINDINGS(my_module) {
+	emscripten::class_<owlDataClass>("owlDataClass").constructor<>()
+	.property("matchData", &owlDataClass::matchDate)
+	.property("matchId", &owlDataClass::matchId)
+	.property("mapName", &owlDataClass::mapName)
+	.property("playerName", &owlDataClass::playerName)
+	.property("teamName", &owlDataClass::teamName)
+	.property("heroName", &owlDataClass::heroName)
+	.property("statName", &owlDataClass::statName)
+	.property("statValue", &owlDataClass::statValue);
+
+	emscripten::register_vector<owlDataClass>("VectorData");
+
+
+  emscripten::function("getProcessedData", &getProcessedData);
+}
+
+
+
 // Merge sort
 void mergeSort(vector<owlDataClass>& arr, int left, int right) {}
 
@@ -99,6 +134,3 @@ int partition(vector<owlDataClass>& arr, int low, int high) {
 
 
 
-EMSCRIPTEN_BINDINGS(my_module) {
-  emscripten::function("sortData", &sortData);
-  }

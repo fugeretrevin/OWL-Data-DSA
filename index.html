@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <title>OWL Data Viewer</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="backend.js"></script>
     <script src="script.js"></script>
+
 </head>
 <body>
 <div id="header-container">
@@ -65,9 +67,21 @@
                     <option value="Time Played">Time Played</option>
                 </select>
             </div>
+
         </div>
 
-    </div>
+
+        </div>
+        <div class="sort-selection">
+            <label>
+                <input type="radio" name="sortAlg" value="merge" checked>
+                Merge Sort
+            </label>
+            <label>
+                <input type="radio" name="sortAlg" value="quick">
+                Quick Sort
+            </label>
+        </div>
     </div>
 
 <div id="button-container">
