@@ -817,8 +817,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "D:/Users/Joshd/COP3530Projects/Project 2/CPP Backend/cmake-build-debug",
-		"source" : "D:/Users/Joshd/COP3530Projects/Project 2/CPP Backend"
+		"build" : "D:/Users/Joshd/COP3530Projects/Project 2/repo/OWL-Data-DSA/cpp_backend/cmake-build-debug",
+		"source" : "D:/Users/Joshd/COP3530Projects/Project 2/repo/OWL-Data-DSA/cpp_backend"
 	},
 	"version" : 
 	{

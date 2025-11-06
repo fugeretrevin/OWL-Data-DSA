@@ -113,7 +113,7 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "owlDataClass.cpp",
+			"path" : "backend.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
