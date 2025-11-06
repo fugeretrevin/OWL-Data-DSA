@@ -37,9 +37,25 @@ vector<owlDataClass> readData(const string& file) {
 
 vector<owlDataClass> filterData(const vector<owlDataClass>& data, const string& stat, const string& player, const string& map, const string& team, const string& hero) {
     // based on user input, returns a filtered vector based on the data vector e.g. containing only stats from a single player
-    // function arguments temporary, depends what we want to take as input on front end
     vector<owlDataClass> filteredData;
-    // func definition
+    for (auto item : data) {    // Could make this code shorter i.e. one big if (... && ... && ...)
+        if (item.statName != stat) {
+            continue;
+        }
+        if (player != "Select Player" && item.playerName != player) {
+            continue;
+        }
+        if (map != "Select Map" && item.mapName != map) {
+            continue;
+        }
+        if (team != "Select Team" && item.teamName != team) {
+            continue;
+        }
+        if (hero != "Select Hero" && item.heroName != hero) {
+            continue;
+        }
+        filteredData.push_back(item);
+    }
     return filteredData;
 }
 
