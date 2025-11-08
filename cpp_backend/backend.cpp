@@ -14,8 +14,16 @@ vector<owlDataClass> readData(const string& file) {
     vector<owlDataClass> data;
     ifstream ifs(file);
     string line;
+    if(!ifs.is_open()) {
+      return data;
+    }
     getline(ifs, line); // reads first line to skip the header (just titles)
     while (getline(ifs, line)) { // reads next line
+      if (line.empty()) {
+        continue;
+        }
+        try {
+
         stringstream ss(line);
         owlDataClass newData;
         string element;
@@ -33,16 +41,22 @@ vector<owlDataClass> readData(const string& file) {
         getline(ss, element, ',');
         newData.statValue = stod(element); // read number/decimal into element then stod()
         data.push_back(newData);
+        } catch (...) {
+          continue;
+        }
     }
+
     return data;
 }
 
-vector<vector<owlDataClass>> readMultipleCSVs(const vector<string>& files) {
-    vector<vector<owlDataClass>> data;
-    for (int i = 0; i < files.size(); ++i) {
-        data[i] = readData(files[i]);
-    }
-    return data;
+vector<owlDataClass> readMultipleCSVs(const vector<string>& files) {
+    vector<owlDataClass> combinedData;
+    for (const string& file : files) {
+      vector<owlDataClass> dataFromOne = readData(file);
+      combinedData.insert(combinedData.end(), dataFromOne.begin(), dataFromOne.end());
+      }
+
+    return combinedData;
 }
 
 
@@ -82,8 +96,8 @@ void sortData(vector<owlDataClass>& data, bool usingMergeSort) { // sorts data v
 
 
 // For JavaScript processing
-vector<owlDataClass> getProcessedData(string filePath, string team, string player, string hero, string map, string stat, bool useMergeSort) {
-    vector<owlDataClass> allData = readData(filePath);
+vector<owlDataClass> getProcessedData(vector<string> filePaths, string team, string player, string hero, string map, string stat, bool useMergeSort) {
+    vector<owlDataClass> allData = readMultipleCSVs(filePaths);
     if (allData.empty()) {
         return vector<owlDataClass>();
     }
@@ -112,6 +126,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
 
     emscripten::register_vector<owlDataClass>("VectorData");
+    emscripten::register_vector<string>("VectorString");
 
 
 
