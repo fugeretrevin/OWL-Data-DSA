@@ -1,17 +1,56 @@
-let Module;
-createModule().then(mod => Module = mod);
+let wasmReady = false;
+let domReady = false;
+
+window.Module = {
+onRuntimeInitialized: function() {
+    console.log("Webassembly loaded correctly");
+    wasmReady = true;
+    startup();
+},
+onAbort: function(reason) {
+    console.error("WebAssembly runtime aborted:", reason);
+    const searchButton = document.getElementById('search-button');
+    if (searchButton) {
+        searchButton.textContent = "Error loading";
+    }
+}
+
+
+};
+
+
+
 
 
 document.addEventListener('DOMContentLoaded', () =>
 {
+    console.log("DOM loaded");
+    domReady = true;
+    startup();
+});
+function startup() {
+    if (!wasmReady || !domReady) {
+        return;
+    }
+    console.log("DOM and wasm ready, starting up");
+
     const teamSelect = document.getElementById("team-dropdown");
     const playerSelect = document.getElementById("player-dropdown");
     const mapSelect = document.getElementById("map-dropdown");
     const heroSelect = document.getElementById("hero-dropdown");
-
+    if (!teamSelect || !playerSelect || !mapSelect || !heroSelect) {
+        console.error("Fatal Error: Could not find one or more dropdown elements in the HTML.");
+        return;
+    }
 
     fetch("./teams.json")
-        .then(response => response.json())
+        .then(response => {
+            
+            if (!response.ok) {
+                throw new Error (`HTTP error, status: ${response.status}`);
+            }
+            return response.json();
+        })
 
         .then(data => {
             data.forEach(teamObj => {
@@ -73,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () =>
     searchButton.addEventListener('click', search);
     const applyButton = document.getElementById('apply-button');
     applyButton.addEventListener('click', apply);
-
+    
     function search() {
         const playerInput = document.getElementById('player-dropdown');
         const heroInput = document.getElementById('hero-dropdown');
@@ -113,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () =>
         resultsContainer.style.display = 'flex'
 
     }
+
     function addTag(value, container) {
         const playerInput = document.getElementById('player-dropdown');
         const heroInput = document.getElementById('hero-dropdown');
@@ -197,12 +237,13 @@ document.addEventListener('DOMContentLoaded', () =>
 
             if (Module) {
                 try {
-                    const filePath = "./OWL-data/phs_2018_playoffs.csv";
+                    const filePath = "/OWL-data/phs_2018_playoffs.csv";
                     const cppVector = Module.getProcessedData(filePath, teamInput.value, playerInput.value, heroInput.value, mapInput.value, statInput.value, useMergeSort);
                     const jsArray = [];
                     const vectorSize = cppVector.size();
                     if (vectorSize === 0) {
                         results.textContent = "No results found";
+                        cppVector.delete();
                         return;
                     }
                     for (let i = 0; i < vectorSize; i++) {
@@ -218,23 +259,57 @@ document.addEventListener('DOMContentLoaded', () =>
                         });
 
                     }
+                    cppVector.delete();
 
                     const topResults = jsArray.slice(0, 50);
-                    results.textContent = `${jsArray.length} results found. Showing top ${topResults.length} results.:${JSON.stringify(topResults, null, 2)}`;
-                    cppVector.delete();
+                    results.innerHTML = "";
+                    const head = document.createElement('h4');
+                    head.textContent = `${jsArray.length} results found. Showing top ${topResults.length}</pre>`;
+                    results.appendChild(head);
+                   // results.:<pre>${JSON.stringify(topResults, null, 2)}
+
+
+                    const list = document.createElement('ul');
+                    list.classList.add('results-list');
+                    results.appendChild(list);
+
+                    topResults.forEach(item => {
+                        const listObj = document.createElement('li');
+                        listObj.classList.add('result-item');
+                        listObj.innerHTML = `
+                        <div class = "result-stat">
+                            <strong>${item.stat}</strong> ${item.value}
+                        </div>
+                        <div class = "result-details">
+                            <span><strong>Player:</strong> ${item.player}</span>
+                             <span><strong>Team:</strong> ${item.team}</span>
+                        </div>
+                         <div class = "result-context">
+                            <span><strong>Hero:</strong> ${item.hero}</span>
+                             <span><strong>Map:</strong> ${item.map}</span>
+                        </div>
+                         <small class = "result-date">Date: ${item.date}</small>
+                        `;
+                        list.appendChild(listObj);
+                    });
+                        
+
+
                 } catch (e) {
                     console.error(e);
                     results.textContent = "Error occurred";
                 }
-            }
+                }
+            
 
         }
 
 
     }
+}
 
 
 
-});
+
 
 

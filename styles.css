@@ -222,3 +222,52 @@ body{
     font-size: 15px;
 
 }
+
+.results-list {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+.result-item {
+    background-color: #f9f9f9;
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    font-family: Arial, sans-serif;
+    color: #333333
+}
+.result-stat {
+    font-size: 14px;
+    font-weight: 600;
+    color: #007baa;
+    margin-bottom: 10px;
+}
+.result-stat strong {
+    color: #333333
+}
+
+.result-details {
+    
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    font-size: 12px;
+    margin-bottom: 8px;
+    color: #555555;
+}
+.result-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    font-size: 12px;
+    margin-bottom: 8px;
+    color: #555555;   
+}
+.result-date {
+    font-size: 10px;
+    color: #888888;
+    margin-top: 10px;
+    display: block;
+}

@@ -39,19 +39,19 @@ vector<owlDataClass> filterData(const vector<owlDataClass>& data, const string& 
     // based on user input, returns a filtered vector based on the data vector e.g. containing only stats from a single player
     vector<owlDataClass> filteredData;
     for (auto item : data) {    // Could make this code shorter i.e. one big if (... && ... && ...)
-        if (item.statName != stat) {
+        if (stat != "" && stat != "All Stats" && item.statName != stat ) {
             continue;
         }
-        if (player != "Select Player" && item.playerName != player) {
+        if (player != "" && item.playerName != player) {
             continue;
         }
-        if (map != "Select Map" && item.mapName != map) {
+        if (map != "" && item.mapName != map) {
             continue;
         }
-        if (team != "Select Team" && item.teamName != team) {
+        if (team != "" && item.teamName != team) {
             continue;
         }
-        if (hero != "Select Hero" && item.heroName != hero) {
+        if (hero != "" && item.heroName != hero) {
             continue;
         }
         filteredData.push_back(item);
