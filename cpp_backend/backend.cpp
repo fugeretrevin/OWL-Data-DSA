@@ -4,9 +4,11 @@
 #include <emscripten/bind.h>
 using namespace std;
 
+
 owlDataClass::owlDataClass() { // default constructor, values should be updated immediately when data is read and parsed
     matchDate = "", matchId = 0, mapName = "", playerName = "", teamName = "", heroName = "", statName = "", statValue = 0;
 }
+
 
 vector<owlDataClass> readData(const string& file) {
     vector<owlDataClass> data;
@@ -35,6 +37,7 @@ vector<owlDataClass> readData(const string& file) {
     return data;
 }
 
+
 vector<owlDataClass> filterData(const vector<owlDataClass>& data, const string& stat, const string& player, const string& map, const string& team, const string& hero) {
     // based on user input, returns a filtered vector based on the data vector e.g. containing only stats from a single player
     vector<owlDataClass> filteredData;
@@ -59,6 +62,7 @@ vector<owlDataClass> filterData(const vector<owlDataClass>& data, const string& 
     return filteredData;
 }
 
+
 void sortData(vector<owlDataClass>& data, bool usingMergeSort) { // sorts data vector, passed in bool based on user input selected merge or quick sort
     if (data.empty()) return;
     if (usingMergeSort) {
@@ -70,36 +74,48 @@ void sortData(vector<owlDataClass>& data, bool usingMergeSort) { // sorts data v
 
 
 
+
+
+
 // For JavaScript processing
 vector<owlDataClass> getProcessedData(string filePath, string team, string player, string hero, string map, string stat, bool useMergeSort) {
-	vector<owlDataClass> allData = readData(filePath);
-	if (allData.empty()) {
-		return vector<owlDataClass>();
-	}
+    vector<owlDataClass> allData = readData(filePath);
+    if (allData.empty()) {
+        return vector<owlDataClass>();
+    }
 
-	vector<owlDataClass> filtered = filterData(allData, stat, player, map, team, hero);
 
-	sortData(filtered, useMergeSort);
+    vector<owlDataClass> filtered = filterData(allData, stat, player, map, team, hero);
 
-	return filtered;
+
+    sortData(filtered, useMergeSort);
+
+
+    return filtered;
 }
 
-EMSCRIPTEN_BINDINGS(my_module) {
-	emscripten::class_<owlDataClass>("owlDataClass").constructor<>()
-	.property("matchData", &owlDataClass::matchDate)
-	.property("matchId", &owlDataClass::matchId)
-	.property("mapName", &owlDataClass::mapName)
-	.property("playerName", &owlDataClass::playerName)
-	.property("teamName", &owlDataClass::teamName)
-	.property("heroName", &owlDataClass::heroName)
-	.property("statName", &owlDataClass::statName)
-	.property("statValue", &owlDataClass::statValue);
 
-	emscripten::register_vector<owlDataClass>("VectorData");
+EMSCRIPTEN_BINDINGS(my_module) {
+    emscripten::class_<owlDataClass>("owlDataClass").constructor<>()
+    .property("matchDate", &owlDataClass::matchDate)
+    .property("matchId", &owlDataClass::matchId)
+    .property("mapName", &owlDataClass::mapName)
+    .property("playerName", &owlDataClass::playerName)
+    .property("teamName", &owlDataClass::teamName)
+    .property("heroName", &owlDataClass::heroName)
+    .property("statName", &owlDataClass::statName)
+    .property("statValue", &owlDataClass::statValue);
+
+
+    emscripten::register_vector<owlDataClass>("VectorData");
+
+
 
 
   emscripten::function("getProcessedData", &getProcessedData);
 }
+
+
 
 
 // Merge sort (Josh) - mergeSort & merge based on class slides
@@ -113,6 +129,7 @@ void mergeSort(vector<owlDataClass>& arr, int left, int right) {
        merge(arr, left, mid, right);
    }
 }
+
 
 void merge(vector<owlDataClass>& arr, int left, int mid, int right) {
    // creating two subarrays from arr
@@ -130,7 +147,7 @@ void merge(vector<owlDataClass>& arr, int left, int mid, int right) {
    int j = 0;
    int k = left;
    while ( i < n1 && j < n2) {
-       if (X[i].statValue <= Y[j].statValue) {
+       if (X[i].statValue >= Y[j].statValue) {
            arr[k] = X[i];
            ++i;
        } else {
@@ -152,6 +169,7 @@ void merge(vector<owlDataClass>& arr, int left, int mid, int right) {
    }
 }
 
+
 // Quick sort (Andrew)
 void quickSort(vector<owlDataClass>& arr, int low, int high) {
    if (low < high) {
@@ -161,27 +179,27 @@ void quickSort(vector<owlDataClass>& arr, int low, int high) {
    }
 }
 
+
 int partition(vector<owlDataClass>& arr, int low, int high) {
-    owlDataClass pivot = arr[low]; // pivot element
-    int up = low;
+    auto pivot = arr[low];
+    int up = low + 1;
     int down = high;
-    while (up < down) {
-        for (int j = up; j < high; j++) {
-            if(arr[up].statValue > pivot.statValue) { // comparing the values at index of up and index of pivot
-                break;
-            }
+    while (up <= down){
+        while (up <= high && arr[up].statValue > pivot.statValue){
             up++;
         }
-        for (int j = high; j > low; j--) {
-            if (arr[down].statValue < pivot.statValue) { // comparing the values at index of down and index of pivot
-                break;
-            }
+        while (down > low && arr[down].statValue <= pivot.statValue){
             down--;
         }
-        if (up < down) {
-            swap(arr[up], arr[down]);
+        if (up < down){
+            std::swap(arr[up], arr[down]);
         }
-        swap(arr[low], arr[high]);
-        return down;
     }
+    std::swap(arr[low], arr[down]);
+    return down;
+
+
 }
+
+
+
