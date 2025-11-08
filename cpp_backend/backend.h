@@ -14,14 +14,15 @@ public:
     string heroName;
     string statName;
     double statValue;
-    // maybe make a default > operator, we'll see what we need
     owlDataClass();
-    // owlDataClass(string& date, int& id, string& map, string& player, string& team, string& hero, string& stat, double& statVal);
 };
 
 vector<owlDataClass> readData(const string& file);
+vector<vector<owlDataClass>> readMultipleCSVs(const vector<string>& files);
 vector<owlDataClass> filterData(const vector<owlDataClass>& data, const string& stat, const string& player, const string& map, const string& team, const string& hero); // filter by a specific stat
 void sortData(vector<owlDataClass>& data, bool usingMergeSort); // call one of the sorts on the data
+// For JS processing:
+vector<owlDataClass> getProcessedData(string filePath, string team, string player, string hero, string map, string stat, bool useMergeSort);
 // Merge sort
 void mergeSort(vector<owlDataClass>& arr, int left, int right);
 void merge(vector<owlDataClass>& arr, int left, int mid, int right);

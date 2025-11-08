@@ -37,6 +37,14 @@ vector<owlDataClass> readData(const string& file) {
     return data;
 }
 
+vector<vector<owlDataClass>> readMultipleCSVs(const vector<string>& files) {
+    vector<vector<owlDataClass>> data;
+    for (int i = 0; i < files.size(); ++i) {
+        data[i] = readData(files[i]);
+    }
+    return data;
+}
+
 
 vector<owlDataClass> filterData(const vector<owlDataClass>& data, const string& stat, const string& player, const string& map, const string& team, const string& hero) {
     // based on user input, returns a filtered vector based on the data vector e.g. containing only stats from a single player
@@ -71,10 +79,6 @@ void sortData(vector<owlDataClass>& data, bool usingMergeSort) { // sorts data v
         quickSort(data, 0, static_cast<int>(data.size()) - 1);
     }
 }
-
-
-
-
 
 
 // For JavaScript processing
