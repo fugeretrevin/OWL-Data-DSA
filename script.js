@@ -239,7 +239,7 @@ function startup() {
             if (Module) {
                 try {
 
-                    const filePath = "/OWL-data/phs_2018_playoffs.csv";
+                    const filePath = "OWL-data/phs_2018_playoffs.csv";
                     const sortAlgName = useMergeSort ? "Merge Sort" : "Quick Sort";
                     const startTime = performance.now();
 
