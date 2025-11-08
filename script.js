@@ -208,6 +208,7 @@ function startup() {
         if (sortChoice === 'merge') {
             useMergeSort = true;
         }
+
         const existingAlert = resultsHeader.querySelector('.alert-text');
         if (existingAlert) {
             existingAlert.remove();
@@ -237,7 +238,12 @@ function startup() {
 
             if (Module) {
                 try {
+
                     const filePath = "/OWL-data/phs_2018_playoffs.csv";
+                    const sortAlgName = useMergeSort ? "Merge Sort" : "Quick Sort";
+                    const startTime = performance.now();
+
+
                     const cppVector = Module.getProcessedData(filePath, teamInput.value, playerInput.value, heroInput.value, mapInput.value, statInput.value, useMergeSort);
                     const jsArray = [];
                     const vectorSize = cppVector.size();
@@ -259,26 +265,34 @@ function startup() {
                         });
 
                     }
+                    const endTime = performance.now();
+                    const timeInMs = (endTime - startTime).toFixed(2);
                     cppVector.delete();
 
                     const topResults = jsArray.slice(0, 50);
                     results.innerHTML = "";
                     const head = document.createElement('h4');
-                    head.textContent = `${jsArray.length} results found. Showing top ${topResults.length}</pre>`;
+                    head.classList.add('results-header');
+                    head.textContent = `${jsArray.length} results found. Showing top ${topResults.length}`;
                     results.appendChild(head);
-                   // results.:<pre>${JSON.stringify(topResults, null, 2)}
+                   // results.:<pre>${JSON.stringify(topResults, null, 2)}</pre>
 
 
-                    const list = document.createElement('ul');
+                   const timerText = document.createElement('p');
+                   timerText.classList.add('timer-text');
+                   timerText.textContent = `Search took ${timeInMs}ms using ${sortAlgName}`;
+                   results.appendChild(timerText);
+
+                    const list = document.createElement('div');
                     list.classList.add('results-list');
                     results.appendChild(list);
 
                     topResults.forEach(item => {
-                        const listObj = document.createElement('li');
+                        const listObj = document.createElement('div');
                         listObj.classList.add('result-item');
                         listObj.innerHTML = `
                         <div class = "result-stat">
-                            <strong>${item.stat}</strong> ${item.value}
+                            <strong>${item.stat}:</strong> ${item.value}
                         </div>
                         <div class = "result-details">
                             <span><strong>Player:</strong> ${item.player}</span>
