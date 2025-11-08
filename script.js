@@ -238,8 +238,8 @@ function startup() {
 
             if (Module) {
                 try {
-                    const filePaths = [
-                        "/OWL-data/phs_2018_playoffs.csv",
+                    const filePaths = 
+                    ["/OWL-data/phs_2018_playoffs.csv",
                         "/OWL-data/phs_2019_playoffs.csv",
                         "/OWL-data/phs_2018_stage_1.csv",
                         "/OWL-data/phs_2018_stage_2.csv",
@@ -248,8 +248,7 @@ function startup() {
                         "/OWL-data/phs_2019_stage_1.csv",
                         "/OWL-data/phs_2019_stage_2.csv",
                         "/OWL-data/phs_2019_stage_3.csv",
-                        "/OWL-data/phs_2019_stage_4.csv"
-                    ];
+                        "/OWL-data/phs_2019_stage_4.csv"];
 
 
                     const sortAlgName = useMergeSort ? "Merge Sort" : "Quick Sort";
