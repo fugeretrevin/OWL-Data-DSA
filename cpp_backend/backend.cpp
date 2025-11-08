@@ -86,7 +86,7 @@ vector<owlDataClass> getProcessedData(string filePath, string team, string playe
 
 EMSCRIPTEN_BINDINGS(my_module) {
 	emscripten::class_<owlDataClass>("owlDataClass").constructor<>()
-	.property("matchData", &owlDataClass::matchDate)
+	.property("matchDate", &owlDataClass::matchDate)
 	.property("matchId", &owlDataClass::matchId)
 	.property("mapName", &owlDataClass::mapName)
 	.property("playerName", &owlDataClass::playerName)
@@ -130,7 +130,7 @@ void merge(vector<owlDataClass>& arr, int left, int mid, int right) {
    int j = 0;
    int k = left;
    while ( i < n1 && j < n2) {
-       if (X[i].statValue <= Y[j].statValue) {
+       if (X[i].statValue >= Y[j].statValue) {
            arr[k] = X[i];
            ++i;
        } else {
@@ -162,26 +162,21 @@ void quickSort(vector<owlDataClass>& arr, int low, int high) {
 }
 
 int partition(vector<owlDataClass>& arr, int low, int high) {
-    owlDataClass pivot = arr[low]; // pivot element
-    int up = low;
+    auto pivot = arr[low];
+    int up = low + 1;
     int down = high;
-    while (up < down) {
-        for (int j = up; j < high; j++) {
-            if(arr[up].statValue > pivot.statValue) { // comparing the values at index of up and index of pivot
-                break;
-            }
+    while (up <= down){
+        while (up <= high && arr[up].statValue > pivot.statValue){
             up++;
         }
-        for (int j = high; j > low; j--) {
-            if (arr[down].statValue < pivot.statValue) { // comparing the values at index of down and index of pivot
-                break;
-            }
+        while (down > low && arr[down].statValue <= pivot.statValue){
             down--;
         }
-        if (up < down) {
-            swap(arr[up], arr[down]);
+        if (up < down){
+            std::swap(arr[up], arr[down]);
         }
-        swap(arr[low], arr[high]);
-        return down;
     }
+    std::swap(arr[low], arr[down]);
+    return down;
+
 }
