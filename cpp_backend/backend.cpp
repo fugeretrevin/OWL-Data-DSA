@@ -1,4 +1,4 @@
-#include "owlDataClass.h"
+#include "backend.h"
 #include <fstream>
 #include <sstream>
 #include <emscripten/bind.h>
@@ -7,13 +7,6 @@ using namespace std;
 owlDataClass::owlDataClass() { // default constructor, values should be updated immediately when data is read and parsed
     matchDate = "", matchId = 0, mapName = "", playerName = "", teamName = "", heroName = "", statName = "", statValue = 0;
 }
-
-// idk if we need a non-default constructor since I'm updating the values in readData()
-// owlDataClass::owlDataClass(string& date, int& id, string& map, string& player, string& team, string& hero, string& stat, double& statVal) {
-//     matchDate = date, matchId = id, mapName = map, playerName = player, teamName = team, heroName = hero, statName = stat, statValue = statVal;
-// }
-
-//I wouldn't imagine so lol
 
 vector<owlDataClass> readData(const string& file) {
     vector<owlDataClass> data;
@@ -44,9 +37,25 @@ vector<owlDataClass> readData(const string& file) {
 
 vector<owlDataClass> filterData(const vector<owlDataClass>& data, const string& stat, const string& player, const string& map, const string& team, const string& hero) {
     // based on user input, returns a filtered vector based on the data vector e.g. containing only stats from a single player
-    // function arguments temporary, depends what we want to take as input on front end
     vector<owlDataClass> filteredData;
-    // func definition
+    for (auto item : data) {    // Could make this code shorter i.e. one big if (... && ... && ...)
+        if (stat != "" && stat != "All Stats" && item.statName != stat ) {
+            continue;
+        }
+        if (player != "" && item.playerName != player) {
+            continue;
+        }
+        if (map != "" && item.mapName != map) {
+            continue;
+        }
+        if (team != "" && item.teamName != team) {
+            continue;
+        }
+        if (hero != "" && item.heroName != hero) {
+            continue;
+        }
+        filteredData.push_back(item);
+    }
     return filteredData;
 }
 
@@ -59,46 +68,120 @@ void sortData(vector<owlDataClass>& data, bool usingMergeSort) { // sorts data v
     }
 }
 
-// Merge sort
-void mergeSort(vector<owlDataClass>& arr, int left, int right) {}
 
-void merge(vector<owlDataClass>& arr, int left, int mid, int right) {}
+
+// For JavaScript processing
+vector<owlDataClass> getProcessedData(string filePath, string team, string player, string hero, string map, string stat, bool useMergeSort) {
+	vector<owlDataClass> allData = readData(filePath);
+	if (allData.empty()) {
+		return vector<owlDataClass>();
+	}
+
+	vector<owlDataClass> filtered = filterData(allData, stat, player, map, team, hero);
+
+	sortData(filtered, useMergeSort);
+
+	return filtered;
+}
+
+EMSCRIPTEN_BINDINGS(my_module) {
+	emscripten::class_<owlDataClass>("owlDataClass").constructor<>()
+	.property("matchData", &owlDataClass::matchDate)
+	.property("matchId", &owlDataClass::matchId)
+	.property("mapName", &owlDataClass::mapName)
+	.property("playerName", &owlDataClass::playerName)
+	.property("teamName", &owlDataClass::teamName)
+	.property("heroName", &owlDataClass::heroName)
+	.property("statName", &owlDataClass::statName)
+	.property("statValue", &owlDataClass::statValue);
+
+	emscripten::register_vector<owlDataClass>("VectorData");
+
+
+  emscripten::function("getProcessedData", &getProcessedData);
+}
+
+
+// Merge sort (Josh) - mergeSort & merge based on class slides
+void mergeSort(vector<owlDataClass>& arr, int left, int right) {
+   if (left < right) {
+       int mid = left + (right - left) / 2;
+       // create subarrays and recursively sort/create more
+       mergeSort(arr, left, mid);
+       mergeSort(arr, mid + 1, right);
+       // merge sorted subarrays
+       merge(arr, left, mid, right);
+   }
+}
+
+void merge(vector<owlDataClass>& arr, int left, int mid, int right) {
+   // creating two subarrays from arr
+   int n1 = mid - left + 1;
+   int n2 = right - mid;
+   vector<owlDataClass> X, Y;
+   for (int i = 0; i < n1; ++i) {
+       X.push_back(arr[left + i]);
+   }
+   for (int j = 0; j < n2; ++j) {
+       Y.push_back(arr[mid + 1 + j]);
+   }
+   // merging the two subarrays back into arr but sorted
+   int i = 0;
+   int j = 0;
+   int k = left;
+   while ( i < n1 && j < n2) {
+       if (X[i].statValue <= Y[j].statValue) {
+           arr[k] = X[i];
+           ++i;
+       } else {
+           arr[k] = Y[j];
+           ++j;
+       }
+       ++k;
+   }
+   // if either X or Y is out of elements, append the remaining elements to arr
+   while (i < n1) {
+       arr[k] = X[i];
+       ++i;
+       ++k;
+   }
+   while (j < n2) {
+       arr[k] = Y[j];
+       ++j;
+       ++k;
+   }
+}
 
 // Quick sort (Andrew)
 void quickSort(vector<owlDataClass>& arr, int low, int high) {
-    if (low < high) {
-      int pivot = partition(arr, low, high);
-      quickSort(arr, low, pivot - 1);
-      quickSort(arr, pivot + 1, high);
-    }
+   if (low < high) {
+     int pivot = partition(arr, low, high); // pivot index
+     quickSort(arr, low, pivot - 1);
+     quickSort(arr, pivot + 1, high);
+   }
 }
 
 int partition(vector<owlDataClass>& arr, int low, int high) {
-    int pivot = arr[low];
+    owlDataClass pivot = arr[low]; // pivot element
     int up = low;
     int down = high;
     while (up < down) {
-      for (int j = up; j < high; j++) {
-        if(array[up].statValue > pivot) {
-          break;
+        for (int j = up; j < high; j++) {
+            if(arr[up].statValue > pivot.statValue) { // comparing the values at index of up and index of pivot
+                break;
+            }
+            up++;
         }
-        up++;
+        for (int j = high; j > low; j--) {
+            if (arr[down].statValue < pivot.statValue) { // comparing the values at index of down and index of pivot
+                break;
+            }
+            down--;
+        }
+        if (up < down) {
+            swap(arr[up], arr[down]);
+        }
+        swap(arr[low], arr[high]);
+        return down;
     }
-    for (int j = high; j > low; j--) {
-      if (array[down].statValue < pivot) {
-        break;
-      }
-      down--;
-    }
-    if (up < down) {
-      swap(&arr[up], &arr[down]);
-    }
-    swap(&arr[low], &arr[high]);
-    return down;
 }
-
-
-
-EMSCRIPTEN_BINDINGS(my_module) {
-  emscripten::function("sortData", &sortData);
-  }

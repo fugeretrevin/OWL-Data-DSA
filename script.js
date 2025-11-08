@@ -1,17 +1,56 @@
-let Module;
-createModule().then(mod => Module = mod);
+let wasmReady = false;
+let domReady = false;
+
+window.Module = {
+onRuntimeInitialized: function() {
+    console.log("Webassembly loaded correctly");
+    wasmReady = true;
+    startup();
+},
+onAbort: function(reason) {
+    console.error("WebAssembly runtime aborted:", reason);
+    const searchButton = document.getElementById('search-button');
+    if (searchButton) {
+        searchButton.textContent = "Error loading";
+    }
+}
+
+
+};
+
+
+
 
 
 document.addEventListener('DOMContentLoaded', () =>
 {
+    console.log("DOM loaded");
+    domReady = true;
+    startup();
+});
+function startup() {
+    if (!wasmReady || !domReady) {
+        return;
+    }
+    console.log("DOM and wasm ready, starting up");
+
     const teamSelect = document.getElementById("team-dropdown");
     const playerSelect = document.getElementById("player-dropdown");
     const mapSelect = document.getElementById("map-dropdown");
     const heroSelect = document.getElementById("hero-dropdown");
-
+    if (!teamSelect || !playerSelect || !mapSelect || !heroSelect) {
+        console.error("Fatal Error: Could not find one or more dropdown elements in the HTML.");
+        return;
+    }
 
     fetch("./teams.json")
-        .then(response => response.json())
+        .then(response => {
+            
+            if (!response.ok) {
+                throw new Error (`HTTP error, status: ${response.status}`);
+            }
+            return response.json();
+        })
 
         .then(data => {
             data.forEach(teamObj => {
@@ -68,13 +107,12 @@ document.addEventListener('DOMContentLoaded', () =>
 
 
     const resultsContainer = document.getElementById('results-container');
-    resultsContainer.visible = false;
     resultsContainer.style.display = 'none';
     const searchButton = document.getElementById('search-button');
     searchButton.addEventListener('click', search);
     const applyButton = document.getElementById('apply-button');
     applyButton.addEventListener('click', apply);
-
+    
     function search() {
         const playerInput = document.getElementById('player-dropdown');
         const heroInput = document.getElementById('hero-dropdown');
@@ -114,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () =>
         resultsContainer.style.display = 'flex'
 
     }
+
     function addTag(value, container) {
         const playerInput = document.getElementById('player-dropdown');
         const heroInput = document.getElementById('hero-dropdown');
@@ -158,7 +197,17 @@ document.addEventListener('DOMContentLoaded', () =>
         const results = document.getElementById('results');
         const resultsHeader = document.getElementById('results-header');
         const filters = document.getElementById('filters');
+        const playerInput = document.getElementById('player-dropdown');
+        const heroInput = document.getElementById('hero-dropdown');
+        const mapInput = document.getElementById('map-dropdown');
+        const teamInput = document.getElementById('team-dropdown');
+        const statInput = document.getElementById('stat-dropdown');
+        const sortChoice = document.querySelector('input[name="sortAlg"]:checked').value;
+        let useMergeSort = false;
 
+        if (sortChoice === 'merge') {
+            useMergeSort = true;
+        }
 
         const existingAlert = resultsHeader.querySelector('.alert-text');
         if (existingAlert) {
@@ -188,23 +237,93 @@ document.addEventListener('DOMContentLoaded', () =>
             //Actually search
 
             if (Module) {
-                const output = Module.runFilters(
-                    teamInput.value,
-                    playerInput.value,
-                    heroInput.value,
-                    mapInput.value,
-                    statInput.value
-                );
-                document.getElementById("results").textContent = output;
-            }
+                try {
+
+                    const filePath = "/OWL-data/phs_2018_playoffs.csv";
+                    const sortAlgName = useMergeSort ? "Merge Sort" : "Quick Sort";
+                    const startTime = performance.now();
+
+
+                    const cppVector = Module.getProcessedData(filePath, teamInput.value, playerInput.value, heroInput.value, mapInput.value, statInput.value, useMergeSort);
+                    const jsArray = [];
+                    const vectorSize = cppVector.size();
+                    if (vectorSize === 0) {
+                        results.textContent = "No results found";
+                        cppVector.delete();
+                        return;
+                    }
+                    for (let i = 0; i < vectorSize; i++) {
+                        const item = cppVector.get(i);
+                        jsArray.push({
+                            player: item.playerName,
+                            team: item.teamName,
+                            hero: item.heroName,
+                            map: item.mapName,
+                            stat: item.statName,
+                            value: item.statValue,
+                            date: item.matchDate
+                        });
+
+                    }
+                    const endTime = performance.now();
+                    const timeInMs = (endTime - startTime).toFixed(2);
+                    cppVector.delete();
+
+                    const topResults = jsArray.slice(0, 50);
+                    results.innerHTML = "";
+                    const head = document.createElement('h4');
+                    head.classList.add('results-header');
+                    head.textContent = `${jsArray.length} results found. Showing top ${topResults.length}`;
+                    results.appendChild(head);
+                   // results.:<pre>${JSON.stringify(topResults, null, 2)}</pre>
+
+
+                   const timerText = document.createElement('p');
+                   timerText.classList.add('timer-text');
+                   timerText.textContent = `Search took ${timeInMs}ms using ${sortAlgName}`;
+                   results.appendChild(timerText);
+
+                    const list = document.createElement('div');
+                    list.classList.add('results-list');
+                    results.appendChild(list);
+
+                    topResults.forEach(item => {
+                        const listObj = document.createElement('div');
+                        listObj.classList.add('result-item');
+                        listObj.innerHTML = `
+                        <div class = "result-stat">
+                            <strong>${item.stat}:</strong> ${item.value}
+                        </div>
+                        <div class = "result-details">
+                            <span><strong>Player:</strong> ${item.player}</span>
+                             <span><strong>Team:</strong> ${item.team}</span>
+                        </div>
+                         <div class = "result-context">
+                            <span><strong>Hero:</strong> ${item.hero}</span>
+                             <span><strong>Map:</strong> ${item.map}</span>
+                        </div>
+                         <small class = "result-date">Date: ${item.date}</small>
+                        `;
+                        list.appendChild(listObj);
+                    });
+                        
+
+
+                } catch (e) {
+                    console.error(e);
+                    results.textContent = "Error occurred";
+                }
+                }
+            
 
         }
 
 
     }
+}
 
 
 
-});
+
 
 
