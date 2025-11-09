@@ -7,9 +7,11 @@
    
 </head>
 <body>
+   <script> var Module = { locateFile: path => path.endsWith('.data') ? 'backend.data' : path.endsWith('.wasm') ? 'backend.wasm' : path, EXPORTED_RUNTIME_METHODS: ['FS', 'cwrap', 'getValue', 'setValue']};</script>
+    <script src="backend.js"></script>
+
     <script src="script.js"></script>
 
-    <script src="backend.js"></script>
 
 <div id="header-container">
     <div id="header">

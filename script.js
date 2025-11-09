@@ -1,7 +1,7 @@
 let wasmReady = false;
 let domReady = false;
 
-window.Module = {
+Object.assign(Module, {
 onRuntimeInitialized: function() {
         console.log("Files in /OWL-data:", Module.FS.readdir("/OWL-data"));
 
@@ -24,7 +24,7 @@ onAbort: function(reason) {
 }
 
 
-};
+});
 
 
 
