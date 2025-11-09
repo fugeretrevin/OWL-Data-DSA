@@ -3,9 +3,17 @@ let domReady = false;
 
 window.Module = {
 onRuntimeInitialized: function() {
+        console.log("Files in /OWL-data:", Module.FS.readdir("/OWL-data"));
+
     console.log("Webassembly loaded correctly");
     wasmReady = true;
-    startup();
+    if (domReady) {
+        startup();
+    }
+},
+postRun: function() {
+    console.log("Files ready");
+    
 },
 onAbort: function(reason) {
     console.error("WebAssembly runtime aborted:", reason);
@@ -22,11 +30,15 @@ onAbort: function(reason) {
 
 
 
+
 document.addEventListener('DOMContentLoaded', () =>
 {
     console.log("DOM loaded");
     domReady = true;
+    if (wasmReady) {
     startup();
+
+    }
 });
 function startup() {
     if (!wasmReady || !domReady) {
