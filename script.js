@@ -5,7 +5,7 @@ let domReady = false;
 // makes sure dom and wasm are loaded properly before attempting functions
 Object.assign(Module, {
 onRuntimeInitialized: function() {
-        console.log("Files in /OWL-data:", Module.FS.readdir("/OWL-data"));
+        console.log("Files in /OWL-data:", FS.readdir("/OWL-data"));
 
     console.log("Webassembly loaded correctly");
     wasmReady = true;
