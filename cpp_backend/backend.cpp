@@ -4,13 +4,18 @@
 #include <emscripten/bind.h>
 using namespace std;
 
-
+vector<owlDataClass> allData;
 owlDataClass::owlDataClass() { // default constructor, values should be updated immediately when data is read and parsed
     matchDate = "", matchId = 0, mapName = "", playerName = "", teamName = "", heroName = "", statName = "", statValue = 0;
 }
 
+void loadAllData(const vector<string>& filePaths) {
+    allData = readMultipleCSVs(filePaths);
+}
 
-vector<owlDataClass> readData(const string& file) {
+
+
+vector<owlDataClass> readData(string file) {
     vector<owlDataClass> data;
     ifstream ifs(file);
     string line;
@@ -18,6 +23,9 @@ vector<owlDataClass> readData(const string& file) {
       return data;
     }
     getline(ifs, line); // reads first line to skip the header (just titles)
+    data.reserve(20000);
+    
+    
     while (getline(ifs, line)) { // reads next line
       if (line.empty()) {
         continue;
@@ -40,7 +48,7 @@ vector<owlDataClass> readData(const string& file) {
         getline(ss, newData.heroName, ',');
         getline(ss, element, ',');
         newData.statValue = stod(element); // read number/decimal into element then stod()
-        data.push_back(newData);
+        data.push_back(move(newData));
         } catch (...) {
           continue;
         }
@@ -49,8 +57,9 @@ vector<owlDataClass> readData(const string& file) {
     return data;
 }
 
-vector<owlDataClass> readMultipleCSVs(const vector<string>& files) {
+vector<owlDataClass> readMultipleCSVs(vector<string> files) {
     vector<owlDataClass> combinedData;
+    combinedData.reserve(50000);
     for (const string& file : files) {
       vector<owlDataClass> dataFromOne = readData(file);
       combinedData.insert(combinedData.end(), dataFromOne.begin(), dataFromOne.end());
@@ -63,7 +72,7 @@ vector<owlDataClass> readMultipleCSVs(const vector<string>& files) {
 vector<owlDataClass> filterData(const vector<owlDataClass>& data, const string& stat, const string& player, const string& map, const string& team, const string& hero) {
     // based on user input, returns a filtered vector based on the data vector e.g. containing only stats from a single player
     vector<owlDataClass> filteredData;
-    for (auto item : data) {    // Could make this code shorter i.e. one big if (... && ... && ...)
+    for (const auto& item : data) {    // Could make this code shorter i.e. one big if (... && ... && ...)
         if (stat != "" && stat != "All Stats" && item.statName != stat ) {
             continue;
         }
@@ -96,13 +105,11 @@ void sortData(vector<owlDataClass>& data, bool usingMergeSort) { // sorts data v
 
 
 // For JavaScript processing
-vector<owlDataClass> getProcessedData(vector<string> filePaths, string team, string player, string hero, string map, string stat, bool useMergeSort) {
-    vector<owlDataClass> allData = readMultipleCSVs(filePaths);
+vector<owlDataClass> getProcessedData(string team, string player, string hero, string map, string stat, bool useMergeSort) {
     if (allData.empty()) {
         return vector<owlDataClass>();
     }
-
-
+    
     vector<owlDataClass> filtered = filterData(allData, stat, player, map, team, hero);
 
 
@@ -126,12 +133,11 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
 
     emscripten::register_vector<owlDataClass>("VectorData");
-    emscripten::register_vector<string>("VectorString");
-
-
-
+    emscripten::register_vector<std::string>("VectorString");
 
   emscripten::function("getProcessedData", &getProcessedData);
+    emscripten::function("loadAllData", &loadAllData);
+
 }
 
 

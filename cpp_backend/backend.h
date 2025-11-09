@@ -17,12 +17,12 @@ public:
     owlDataClass();
 };
 
-vector<owlDataClass> readData(const string& file);
-vector<owlDataClass> readMultipleCSVs(const vector<string>& files);
+vector<owlDataClass> readData(string file);
+vector<owlDataClass> readMultipleCSVs(vector<string> files);
 vector<owlDataClass> filterData(const vector<owlDataClass>& data, const string& stat, const string& player, const string& map, const string& team, const string& hero); // filter by a specific stat
 void sortData(vector<owlDataClass>& data, bool usingMergeSort); // call one of the sorts on the data
 // For JS processing:
-vector<owlDataClass> getProcessedData(vector<string> filePaths, string team, string player, string hero, string map, string stat, bool useMergeSort);
+vector<owlDataClass> getProcessedData(string team, string player, string hero, string map, string stat, bool useMergeSort);
 // Merge sort
 void mergeSort(vector<owlDataClass>& arr, int left, int right);
 void merge(vector<owlDataClass>& arr, int left, int mid, int right);

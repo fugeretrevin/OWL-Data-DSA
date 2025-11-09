@@ -41,7 +41,26 @@ function startup() {
     if (!teamSelect || !playerSelect || !mapSelect || !heroSelect) {
         console.error("Fatal Error: Could not find one or more dropdown elements in the HTML.");
         return;
-    }
+    }                 
+    console.log("loading CSVS");
+    
+const cppFilePaths = new Module.VectorString();
+[
+ "/OWL-data/phs_2018_playoffs.csv",
+  "/OWL-data/phs_2019_playoffs.csv",
+  "/OWL-data/phs_2018_stage_1.csv",
+  "/OWL-data/phs_2018_stage_2.csv",
+  "/OWL-data/phs_2018_stage_3.csv",
+  "/OWL-data/phs_2018_stage_4.csv",
+  "/OWL-data/phs_2019_stage_1.csv",
+  "/OWL-data/phs_2019_stage_2.csv",
+  "/OWL-data/phs_2019_stage_3.csv",
+  "/OWL-data/phs_2019_stage_4.csv"
+].forEach(path => cppFilePaths.push_back(path));
+
+Module.loadAllData(cppFilePaths);
+cppFilePaths.delete();
+console.log("CSVs loaded successfully");
 
     fetch("./teams.json")
         .then(response => {
@@ -238,24 +257,18 @@ function startup() {
 
             if (Module) {
                 try {
-                    const filePaths = 
-                    ["/OWL-data/phs_2018_playoffs.csv",
-                        "/OWL-data/phs_2019_playoffs.csv",
-                        "/OWL-data/phs_2018_stage_1.csv",
-                        "/OWL-data/phs_2018_stage_2.csv",
-                        "/OWL-data/phs_2018_stage_3.csv",
-                        "/OWL-data/phs_2018_stage_4.csv",
-                        "/OWL-data/phs_2019_stage_1.csv",
-                        "/OWL-data/phs_2019_stage_2.csv",
-                        "/OWL-data/phs_2019_stage_3.csv",
-                        "/OWL-data/phs_2019_stage_4.csv"];
-
+                    //const filePaths = ["/OWL-data/phs_2018_playoffs.csv", "/OWL-data/phs_2019_playoffs.csv", "/OWL-data/phs_2018_stage_1.csv", "/OWL-data/phs_2018_stage_2.csv", "/OWL-data/phs_2018_stage_3.csv", "/OWL-data/phs_2018_stage_4.csv", "/OWL-data/phs_2019_stage_1.csv", "/OWL-data/phs_2019_stage_2.csv", "/OWL-data/phs_2019_stage_3.csv", "/OWL-data/phs_2019_stage_4.csv"];
 
                     const sortAlgName = useMergeSort ? "Merge Sort" : "Quick Sort";
                     const startTime = performance.now();
+                    
+                   // const cppFilePaths = new Module.VectorString();
+                    //filePaths.forEach(path => cppFilePaths.push_back(path));
 
 
-                    const cppVector = Module.getProcessedData(filePaths, teamInput.value, playerInput.value, heroInput.value, mapInput.value, statInput.value, useMergeSort);
+                    const cppVector = Module.getProcessedData(teamInput.value, playerInput.value, heroInput.value, mapInput.value, statInput.value, useMergeSort);
+                     //cppFilePaths.delete();
+                    
                     const jsArray = [];
                     const vectorSize = cppVector.size();
                     if (vectorSize === 0) {
@@ -279,6 +292,7 @@ function startup() {
                     const endTime = performance.now();
                     const timeInMs = (endTime - startTime).toFixed(2);
                     cppVector.delete();
+                   
 
                     const topResults = jsArray.slice(0, 50);
                     results.innerHTML = "";
