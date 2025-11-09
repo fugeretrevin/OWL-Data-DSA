@@ -14,21 +14,17 @@ void loadAllData(const vector<string>& filePaths) {
 }
 
 int safe_stoi(const std::string& s) {
-    if (s.empty()) return 0;
-    try {
-        return std::stoi(s);
-    } catch(...) {
-        return 0;
-    }
+    int result = 0;
+    std::stringstream ss(s);
+    ss >> result;
+    return result;
 }
 
 double safe_stod(const std::string& s) {
-    if (s.empty()) return 0.0;
-    try {
-        return std::stod(s);
-    } catch(...) {
-        return 0.0;
-    }
+    double result = 0.0;
+    std::stringstream ss(s);
+    ss >> result;
+    return result;
 }
 
 
