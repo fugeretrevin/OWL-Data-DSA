@@ -13,6 +13,23 @@ void loadAllData(const vector<string>& filePaths) {
     allData = readMultipleCSVs(filePaths);
 }
 
+int safe_stoi(const std::string& s) {
+    if (s.empty()) return 0;
+    try {
+        return std::stoi(s);
+    } catch(...) {
+        return 0;
+    }
+}
+
+double safe_stod(const std::string& s) {
+    if (s.empty()) return 0.0;
+    try {
+        return std::stod(s);
+    } catch(...) {
+        return 0.0;
+    }
+}
 
 
 vector<owlDataClass> readData(string file) {
@@ -38,7 +55,7 @@ vector<owlDataClass> readData(string file) {
         getline(ss, newData.matchDate, ' '); // date is formatted mm/dd/yyyy hh:mm, we want the day not the time so we read up to the space
         getline(ss, element, ','); // read to the next comma and skip it
         getline(ss, element, ',');
-        newData.matchId = stoi(element); // read number into element then stoi()
+        newData.matchId = safe_stoi(element); // read number into element then stoi()
         getline(ss, element, ','); // skip the stage/game type
         getline(ss, element, ','); // skip the map type
         getline(ss, newData.mapName, ',');
@@ -47,7 +64,7 @@ vector<owlDataClass> readData(string file) {
         getline(ss, newData.statName, ',');
         getline(ss, newData.heroName, ',');
         getline(ss, element, ',');
-        newData.statValue = stod(element); // read number/decimal into element then stod()
+        newData.statValue = safe_stod(element); // read number/decimal into element then stod()
         data.push_back(move(newData));
         } catch (...) {
           continue;
