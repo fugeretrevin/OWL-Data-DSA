@@ -9,10 +9,13 @@ owlDataClass::owlDataClass() { // default constructor, values should be updated 
     matchDate = "", matchId = 0, mapName = "", playerName = "", teamName = "", heroName = "", statName = "", statValue = 0;
 }
 
+// load data upfront to mitigate load during run
 void loadAllData(const vector<string>& filePaths) {
     allData = readMultipleCSVs(filePaths);
 }
 
+
+// helps parsing errors
 int safe_stoi(const std::string& s) {
     int result = 0;
     std::stringstream ss(s);
@@ -70,8 +73,12 @@ vector<owlDataClass> readData(string file) {
     return data;
 }
 
+
+//goes through each csv and adds it to a vector
 vector<owlDataClass> readMultipleCSVs(vector<string> files) {
     vector<owlDataClass> combinedData;
+
+    // upfront space reserve to lessen time taken slightly
     combinedData.reserve(50000);
     for (const string& file : files) {
       vector<owlDataClass> dataFromOne = readData(file);
@@ -106,8 +113,8 @@ vector<owlDataClass> filterData(const vector<owlDataClass>& data, const string& 
     return filteredData;
 }
 
-
-void sortData(vector<owlDataClass>& data, bool usingMergeSort) { // sorts data vector, passed in bool based on user input selected merge or quick sort
+// sorts data vector, passed in bool based on user input selected merge or quick sort
+void sortData(vector<owlDataClass>& data, bool usingMergeSort) { 
     if (data.empty()) return;
     if (usingMergeSort) {
         mergeSort(data, 0, static_cast<int>(data.size()) - 1);
@@ -132,7 +139,7 @@ vector<owlDataClass> getProcessedData(string team, string player, string hero, s
     return filtered;
 }
 
-
+//emscripten compiler code, shows errors if not installed, but doesnt affect anything - only for javascript interface
 EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::class_<owlDataClass>("owlDataClass").constructor<>()
     .property("matchDate", &owlDataClass::matchDate)

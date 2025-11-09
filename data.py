@@ -1,6 +1,10 @@
 import pandas as pd
 import numpy as np
 import json
+
+# overall purpose to manipulate data in csvs to gather unique teams and players for dropdown menus
+
+
 df1 = pd.read_csv('./OWL-data/phs_2018_playoffs.csv', encoding='latin1')
 df2 = pd.read_csv('./OWL-data/phs_2019_playoffs.csv', encoding='latin1')
 df3 = pd.read_csv('./OWL-data/phs_2018_stage_1.csv', encoding='latin1')

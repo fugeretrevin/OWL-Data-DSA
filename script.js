@@ -1,6 +1,8 @@
 let wasmReady = false;
 let domReady = false;
 
+
+// makes sure dom and wasm are loaded properly before attempting functions
 Object.assign(Module, {
 onRuntimeInitialized: function() {
         console.log("Files in /OWL-data:", Module.FS.readdir("/OWL-data"));
@@ -30,7 +32,7 @@ onAbort: function(reason) {
 
 
 
-
+// essentially on page loaded
 document.addEventListener('DOMContentLoaded', () =>
 {
     console.log("DOM loaded");
@@ -70,10 +72,15 @@ const cppFilePaths = new Module.VectorString();
   "/OWL-data/phs_2019_stage_4.csv"
 ].forEach(path => cppFilePaths.push_back(path));
 
+
+// preload all data for future sorting | takes a long time 
+
 Module.loadAllData(cppFilePaths);
 cppFilePaths.delete();
 console.log("CSVs loaded successfully");
 
+
+// fills dropdowns with information from teams and players json file
     fetch("./teams.json")
         .then(response => {
             
@@ -91,6 +98,7 @@ console.log("CSVs loaded successfully");
                 teamSelect.appendChild(option);
             });
 
+            // when team is changed, remove player value as that player isnt on the newly selected team
             teamSelect.addEventListener("change", () => {
                 const selectedTeam = teamSelect.value;
 
@@ -108,32 +116,36 @@ console.log("CSVs loaded successfully");
                 }
             });
         })
-    fetch("./maps.json")
-        .then(response => response.json())
 
-        .then(data => {
-            data.forEach(mapObj => {
-                const option = document.createElement("option");
-                option.value = mapObj;
-                option.textContent = mapObj;
-                mapSelect.appendChild(option);
-            });
+        //fill maps dropdown
+        fetch("./maps.json")
+            .then(response => response.json())
 
-
-        })
-    fetch("./heros.json")
-        .then(response => response.json())
-
-        .then(data => {
-            data.forEach(heroObj => {
-                const option = document.createElement("option");
-                option.value = heroObj;
-                option.textContent = heroObj;
-                heroSelect.appendChild(option);
-            });
+            .then(data => {
+                data.forEach(mapObj => {
+                    const option = document.createElement("option");
+                    option.value = mapObj;
+                    option.textContent = mapObj;
+                    mapSelect.appendChild(option);
+                });
 
 
-        })
+            })
+
+        //fill heros dropdown
+        fetch("./heros.json")
+            .then(response => response.json())
+
+            .then(data => {
+                data.forEach(heroObj => {
+                    const option = document.createElement("option");
+                    option.value = heroObj;
+                    option.textContent = heroObj;
+                    heroSelect.appendChild(option);
+                });
+
+
+            })
 
 
 
@@ -144,6 +156,7 @@ console.log("CSVs loaded successfully");
     const applyButton = document.getElementById('apply-button');
     applyButton.addEventListener('click', apply);
     
+    // get user inputs and convert to tags for parsing and search
     function search() {
         const playerInput = document.getElementById('player-dropdown');
         const heroInput = document.getElementById('hero-dropdown');
@@ -184,6 +197,7 @@ console.log("CSVs loaded successfully");
 
     }
 
+    //add a visual tag so user can see what is selected
     function addTag(value, container) {
         const playerInput = document.getElementById('player-dropdown');
         const heroInput = document.getElementById('hero-dropdown');
@@ -224,6 +238,7 @@ console.log("CSVs loaded successfully");
         });
         container.appendChild(tag);
     }
+    // takes all changes made and applies to search
     function apply() {
         const results = document.getElementById('results');
         const resultsHeader = document.getElementById('results-header');
@@ -244,6 +259,8 @@ console.log("CSVs loaded successfully");
         if (existingAlert) {
             existingAlert.remove();
         }
+
+        // need team and another filter to help result length
         if (filters.children.length < 2) {
             results.textContent = 'Team and one other filter required.';
 
@@ -265,21 +282,20 @@ console.log("CSVs loaded successfully");
             if (!teamSelected) {
                 results.textContent = "Team and one other filter required.";
             }
-            //Actually search
+            // perform the search
 
             if (Module) {
                 try {
-                    //const filePaths = ["/OWL-data/phs_2018_playoffs.csv", "/OWL-data/phs_2019_playoffs.csv", "/OWL-data/phs_2018_stage_1.csv", "/OWL-data/phs_2018_stage_2.csv", "/OWL-data/phs_2018_stage_3.csv", "/OWL-data/phs_2018_stage_4.csv", "/OWL-data/phs_2019_stage_1.csv", "/OWL-data/phs_2019_stage_2.csv", "/OWL-data/phs_2019_stage_3.csv", "/OWL-data/phs_2019_stage_4.csv"];
-
+                    
+                    // turns algorithm choice into a string name
                     const sortAlgName = useMergeSort ? "Merge Sort" : "Quick Sort";
+
+                    // start time of sort
                     const startTime = performance.now();
                     
-                   // const cppFilePaths = new Module.VectorString();
-                    //filePaths.forEach(path => cppFilePaths.push_back(path));
-
-
+                   
+                    // initiate cpp script to collect sorted data
                     const cppVector = Module.getProcessedData(teamInput.value, playerInput.value, heroInput.value, mapInput.value, statInput.value, useMergeSort);
-                     //cppFilePaths.delete();
                     
                     const jsArray = [];
                     const vectorSize = cppVector.size();
@@ -288,6 +304,8 @@ console.log("CSVs loaded successfully");
                         cppVector.delete();
                         return;
                     }
+
+                    // create items to display
                     for (let i = 0; i < vectorSize; i++) {
                         const item = cppVector.get(i);
                         jsArray.push({
@@ -301,25 +319,27 @@ console.log("CSVs loaded successfully");
                         });
 
                     }
+
+                    // end timer
                     const endTime = performance.now();
                     const timeInMs = (endTime - startTime).toFixed(2);
                     cppVector.delete();
                    
-
+                    // show top 50 results
                     const topResults = jsArray.slice(0, 50);
                     results.innerHTML = "";
                     const head = document.createElement('h4');
                     head.classList.add('results-header');
                     head.textContent = `${jsArray.length} results found. Showing top ${topResults.length}`;
                     results.appendChild(head);
-                   // results.:<pre>${JSON.stringify(topResults, null, 2)}</pre>
 
-
+                    // text to show how long search took
                    const timerText = document.createElement('p');
                    timerText.classList.add('timer-text');
                    timerText.textContent = `Search took ${timeInMs}ms using ${sortAlgName}`;
                    results.appendChild(timerText);
 
+                   //create html for each result item and add to results list
                     const list = document.createElement('div');
                     list.classList.add('results-list');
                     results.appendChild(list);
